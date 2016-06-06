@@ -22,6 +22,7 @@ import java.io.InputStream;
  * Http 请求
  * 1.设置请求头
  * 2.设置请求编码
+ * 3.******
  * Created by Administrator on 2016/6/6.
  */
 public class HttpRequestUtils {
@@ -31,7 +32,6 @@ public class HttpRequestUtils {
     private static int readTime = 50000;
 
     private static String charset = "UTF-8";
-
 
     /**
      * get 请求
