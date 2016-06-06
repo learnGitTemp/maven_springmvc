@@ -22,7 +22,7 @@ import java.io.InputStream;
  * Http 请求
  * 1.设置请求头
  * 2.设置请求编码
- * 3.******
+ * 3.*****
  * Created by Administrator on 2016/6/6.
  */
 public class HttpRequestUtils {
