@@ -32,9 +32,10 @@ public class HttpRequestUtils {
 
     private static String charset = "UTF-8";
 
+
     /**
      * get 请求
-     * @param url 请求地址
+     * @param url 请求地址url
      * @param charset 请求编码
      * @param connTime 连接超时时间 秒
      * @param readTime 响应超时时间 秒
