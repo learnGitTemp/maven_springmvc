@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<mei.shi.mo.kuai link="/mokuai/meishi">
+		<add.mei.shi link="/mokuai/meishi/add" />
+		<update.mei.shi link="/mokuai/meishi/update" />
+		<delete.mei.shi link="/mokuai/meishi/delete" />
+		<find.mei.shi link="/mokuai/meishi/find" />
+		<find.list.mei.shi link="/mokuai/meishi/list" />
+	</mei.shi.mo.kuai>
+</config>
