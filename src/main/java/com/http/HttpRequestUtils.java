@@ -1,6 +1,7 @@
 package com.http;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -8,7 +9,10 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpHead;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.config.ConnectionConfig;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
@@ -35,8 +39,9 @@ public class HttpRequestUtils {
 
     /**
      * get 请求
-     * @param url 请求地址url
-     * @param charset 请求编码
+     *
+     * @param url      请求地址url
+     * @param charset  请求编码
      * @param connTime 连接超时时间 秒
      * @param readTime 响应超时时间 秒
      * @return String
@@ -63,7 +68,6 @@ public class HttpRequestUtils {
 
         httpClient = HttpClientBuilder.create().build();
         InputStream inputStream = null;
-        BufferedInputStream bufferedInputStream = null;
         try {
             HttpResponse result = httpClient.execute(httpGet);
             HttpEntity entity = result.getEntity();
@@ -73,6 +77,8 @@ public class HttpRequestUtils {
             response = IOUtils.toString(inputStream, charset);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e1) {
+            e1.printStackTrace();
         } finally {
             httpGet.releaseConnection();
             try {
@@ -80,14 +86,63 @@ public class HttpRequestUtils {
                 if (inputStream != null) {
                     inputStream.close();
                 }
-
-                if (bufferedInputStream != null) {
-                    bufferedInputStream.close();
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        return response;
+    }
+
+    /**
+     * post 请求
+     *
+     * @param url      请求地址url
+     * @param charset  请求编码
+     * @param connTime 连接超时时间 秒
+     * @param readTime 响应超时时间 秒
+     * @param body     请求类型
+     * @param type     例如 application/xml "application/x-www-form-urlencoded" a=1&b=2&c=3
+     * @return String
+     */
+    public static String post(String url, String charset, Integer connTime, Integer readTime, String body, String type) {
+        HttpClient httpClient = null;
+        HttpEntity entity = null;
+        HttpPost httpPost = new HttpPost(url);
+        String response = "";
+
+        if (StringUtils.isNotEmpty(body)) {
+            entity = new StringEntity(body, ContentType.create(type, charset));
+        } else {
+            entity = new StringEntity(body, ContentType.APPLICATION_JSON);
+        }
+
+        RequestConfig.Builder builder = RequestConfig.custom();
+        if (connTime != null) {
+            builder.setConnectTimeout(connTime);
+        }
+
+        if (readTime != null) {
+            builder.setSocketTimeout(readTime);
+        }
+        RequestConfig config = builder.build();
+        httpPost.setConfig(config);
+        httpPost.addHeader("Content-Type", "application/json; charset=utf-8");
+        httpPost.addHeader("Connection", "keep-alive");
+        httpPost.setEntity(entity);
+        httpClient = HttpClientBuilder.create().build();
+        try {
+            HttpResponse result = httpClient.execute(httpPost);
+            HttpEntity resultEntity = result.getEntity();
+
+            InputStream inputStream = null;
+            inputStream = resultEntity.getContent();
+            response = IOUtils.toString(inputStream, charset);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+
         return response;
     }
 
