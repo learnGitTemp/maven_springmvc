@@ -41,65 +41,22 @@ import java.security.cert.X509Certificate;
  */
 public class HttpRequestUtils {
 
-    private static int connTime = 50000;
+    public static final int CONNTIME = 60000;
 
-    private static int readTime = 50000;
+    public static final int READTIME = 60000;
 
-    private static String charset = "UTF-8";
+    public static final String CHARSET = "UTF-8";
 
-    public static String get(String url, String params, String charset, Integer connTime, Integer readTime) {
-        HttpClient httpClient = null;
+    private Proxy proxy;
 
-        System.out.println(url);
-        HttpGet httpGet = new HttpGet(url);
-        String response = "";
-
-        RequestConfig.Builder builder = RequestConfig.custom();
-        if (connTime != null) {
-            builder.setConnectTimeout(connTime);
-        }
-
-        if (readTime != null) {
-            builder.setSocketTimeout(readTime);
-        }
-        builder.setProxy(new HttpHost("120.76.31.181", 27739));
-        RequestConfig config = builder.build();
-
-        httpGet.setConfig(config);
-        httpGet.addHeader("Content-Type", "charset=utf-8");
-        httpGet.addHeader("Connection", "keep-alive");
-        httpGet.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36");
-
-        if (StringUtils.startsWith(url, "https")) {
-            httpClient = createSslHttpClient();
-        } else {
-            httpClient = HttpClientBuilder.create().build();
-        }
-
-        InputStream inputStream = null;
-        try {
-            HttpResponse result = httpClient.execute(httpGet);
-            HttpEntity entity = result.getEntity();
-            System.out.println("^^^^^^^^^获取编码类型:" + entity.getContentType());
-            inputStream = entity.getContent();
-
-            response = IOUtils.toString(inputStream, charset);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        } finally {
-            httpGet.releaseConnection();
-            try {
-                ((CloseableHttpClient) httpClient).close();
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return response;
+    /**
+     * get 请求
+     *
+     * @param url      请求地址url
+     * @return String
+     */
+    public String get(String url) {
+        return get(url, CHARSET, CONNTIME, READTIME);
     };
 
     /**
@@ -111,7 +68,7 @@ public class HttpRequestUtils {
      * @param readTime 响应超时时间 秒
      * @return String
      */
-    public static String get(String url, String charset, Integer connTime, Integer readTime) throws UnsupportedEncodingException {
+    public String get(String url, String charset, Integer connTime, Integer readTime) {
         HttpClient httpClient = null;
 
         System.out.println(url);
@@ -126,10 +83,13 @@ public class HttpRequestUtils {
         if (readTime != null) {
             builder.setSocketTimeout(readTime);
         }
-        builder.setProxy(new HttpHost("120.76.31.181", 27739));
-        RequestConfig config = builder.build();
 
+        if (proxy != null) {
+            builder.setProxy(new HttpHost(proxy.getIp(), proxy.getHost()));
+        }
+        RequestConfig config = builder.build();
         httpGet.setConfig(config);
+
         httpGet.addHeader("Content-Type", "charset=utf-8");
         httpGet.addHeader("Connection", "keep-alive");
         httpGet.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36");
@@ -177,7 +137,7 @@ public class HttpRequestUtils {
      * @param type     例如 application/xml "application/x-www-form-urlencoded" a=1&b=2&c=3
      * @return String
      */
-    public static String post(String url, String charset, Integer connTime, Integer readTime, String body, String type) {
+    public String post(String url, String charset, Integer connTime, Integer readTime, String body, String type) {
         HttpClient httpClient = null;
         HttpEntity entity = null;
         HttpPost httpPost = new HttpPost(url);
@@ -225,7 +185,11 @@ public class HttpRequestUtils {
         return response;
     }
 
-    public static CloseableHttpClient createSslHttpClient() {
+    /**
+     * 获取SSL 连接方式
+     * @return
+     */
+    public CloseableHttpClient createSslHttpClient() {
         CloseableHttpClient closeableHttpClient = null;
         try {
             SSLContext sslContext = null;
@@ -251,4 +215,11 @@ public class HttpRequestUtils {
         return closeableHttpClient;
     }
 
+    public Proxy getProxy() {
+        return proxy;
+    }
+
+    public void setProxy(Proxy proxy) {
+        this.proxy = proxy;
+    }
 }

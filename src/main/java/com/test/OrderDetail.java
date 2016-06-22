@@ -1,6 +1,7 @@
 package com.test;
 
 import com.http.HttpRequestUtils;
+import com.http.Proxy;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -11,14 +12,15 @@ import java.net.URLEncoder;
 public class OrderDetail {
 
     public static void main(String[] args) throws UnsupportedEncodingException {
-        String text = "google-api-translate-java is distributed in the hope that it will be useful,\n" +
-                " * & but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-                " *  & #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
-                " * GNU General Public License for more details.";
+        String text = "那么问题来了，如果在外观上与6S相 & 差不大， #而且还彻底将3.5mm耳机插孔取消，这样的iPhone7你会购买吗?";
         text = URLEncoder.encode(text, "UTF-8");
-        System.out.println("^^^^^^^^^^^^^^^^^fig 001" + text);
-        String url = "https://www.googleapis.com/language/translate/v2?q=" + text + "&target=zh&source=en&key=AIzaSyD7SqEMwWIRLxJP3IRyv4iUDoCSTomtgc8";
-        String response = HttpRequestUtils.get(url, "UTF-8", 50000, 50000);
+        String url = "https://www.googleapis.com/language/translate/v2?q=" + text + "&target=en&source=zh&key=AIzaSyD7SqEMwWIRLxJP3IRyv4iUDoCSTomtgc8";
+
+        /*Proxy proxy = new Proxy("120.76.31.181", 27739); */
+        HttpRequestUtils utils = new HttpRequestUtils();
+        //utils.setProxy(proxy);
+
+        String response = utils.get(url);
         System.out.println(response);
     }
 
