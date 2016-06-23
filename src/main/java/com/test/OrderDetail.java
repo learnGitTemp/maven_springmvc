@@ -16,9 +16,9 @@ public class OrderDetail {
         text = URLEncoder.encode(text, "UTF-8");
         String url = "https://www.googleapis.com/language/translate/v2?q=" + text + "&target=en&source=zh&key=AIzaSyD7SqEMwWIRLxJP3IRyv4iUDoCSTomtgc8";
 
-        /*Proxy proxy = new Proxy("120.76.31.181", 27739); */
+        Proxy proxy = new Proxy("120.76.31.181", 27739);
         HttpRequestUtils utils = new HttpRequestUtils();
-        //utils.setProxy(proxy);
+        utils.setProxy(proxy);
 
         String response = utils.get(url);
         System.out.println(response);
