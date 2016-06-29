@@ -50,13 +50,21 @@ public class Md5 {
         return sBuffer.toString();
     }
 
+    private static String byteToString2(byte[] bByte) {
+        StringBuffer sBuffer = new StringBuffer();
+        for (int i = 0; i < bByte.length; i++) {
+            sBuffer.append(byteToArrayString(bByte[i]));
+        }
+        return sBuffer.toString();
+    }
+
     public static String GetMD5Code(String strObj) {
         String resultString = null;
         try {
-            resultString = new String(strObj);
+            //resultString = new String(strObj);
             MessageDigest md = MessageDigest.getInstance("MD5");
             //md.digest(); //该函数返回值为存放哈希值结果的byte数组
-            resultString = byteToString(md.digest(strObj.getBytes()));
+            resultString = byteToString2(md.digest(strObj.getBytes()));
         } catch (NoSuchAlgorithmException ex) {
             ex.printStackTrace();
         }
@@ -65,7 +73,7 @@ public class Md5 {
 
     public static void main(String[] args) throws Exception {
         Md5 getMD5 = new Md5();
-        System.out.println(getMD5.GetMD5Code("ni hao"));
+        System.out.println(getMD5.GetMD5Code("tangtaiming123"));
     }
 
 }
