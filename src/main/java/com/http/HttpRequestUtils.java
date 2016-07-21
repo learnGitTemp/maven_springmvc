@@ -1,5 +1,6 @@
 package com.http;
 
+import com.tomtop.system.libraries.util.Json;
 import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -22,6 +23,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
 import java.io.*;
@@ -31,6 +35,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.LinkedHashMap;
 
 /**
  * Http 请求
@@ -126,6 +131,7 @@ public class HttpRequestUtils {
         return response;
     }
 
+
     /**
      * post 请求
      *
@@ -143,7 +149,9 @@ public class HttpRequestUtils {
         HttpPost httpPost = new HttpPost(url);
         String response = "";
 
+
         if (StringUtils.isNotEmpty(body)) {
+
             entity = new StringEntity(body, ContentType.create(type, charset));
         } else {
             entity = new StringEntity(body, ContentType.APPLICATION_JSON);
@@ -213,6 +221,26 @@ public class HttpRequestUtils {
             e.printStackTrace();
         }
         return closeableHttpClient;
+    }
+
+    public Object post(String url, Object body) {
+        String request = Json.toJson(body);
+        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^curl :" + url);
+        System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^curl :" + request);
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            MultiValueMap<String, String> header = new LinkedMultiValueMap<String, String>();
+            header.add("Accept", "application/json;charset=utf-8");
+            header.add("Content-Type", "application/json;charset=utf-8");
+            org.springframework.http.HttpEntity<Object> body_ = new org.springframework.http.HttpEntity<Object>(request, header);
+
+            Object response_ = restTemplate.postForObject(url, body_, String.class, new Object[0]);
+            return response_;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public Proxy getProxy() {
