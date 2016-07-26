@@ -4,11 +4,7 @@ import com.http.HttpRequestUtils;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.orm.RepairTomtopProduct;
-import com.sun.org.apache.xpath.internal.SourceTree;
 import com.tomtop.system.libraries.util.Json;
-import com.ttm.reflection.Factory;
-import com.ttm.reflection.InterfaceTest;
-import com.ttm.util.Dumper;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
@@ -16,7 +12,6 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 测试反射

@@ -5,7 +5,6 @@ import com.orm.RepairTomtopProduct;
 import com.test.RepairTomtopProductDao;
 import com.test.RepairTomtopProductDaoImpl;
 import com.tomtop.system.libraries.util.Json;
-import com.ttm.util.Dumper;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.BeforeClass;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
