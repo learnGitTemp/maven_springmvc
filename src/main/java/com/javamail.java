@@ -22,13 +22,11 @@ public class javamail {
             email.setSubject(mail.getSubject());
             email.setMsg(mail.getMessage());
             email.send();
-            if (logger.isDebugEnabled()) {
-                logger.debug(mail.getSender() + "发送邮件." + mail.getReceiver());
-            }
+            System.out.println("^^^^^^^^^^^^^^^^^^^^^^^发送");
         } catch (Exception e) {
-            logger.info("失败.");
+            System.out.println("^^^^^^^^^^^^^^^^^^" + e);
         }
-        return false;
+        return true;
     }
 
 }
